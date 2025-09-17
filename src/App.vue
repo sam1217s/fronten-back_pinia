@@ -12,20 +12,26 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Login from './components/Login.vue'
+import { apiClient } from './plugins/pluginAxios.js'
 
 const router = useRouter()
 const isAuthenticated = ref(false)
 
 onMounted(() => {
-  const token = localStorage.getItem('pruebas')
-  if (token) {
+  const tokenData = JSON.parse(localStorage.getItem('pruebas') || '{}')
+  
+  if (tokenData.token) {
+    // CONFIGURAR el token en axios al montar la aplicación
+    apiClient.defaults.headers['x-token'] = tokenData.token
+    console.log('Token configurado en onMounted')
+    
     isAuthenticated.value = true
-    router.push('/home')
+    router.push('/productos')
   }
 })
 
 function handleLoginSuccess() {
   isAuthenticated.value = true
-  router.push('/login.vue')
+  router.push('/productos')
 }
 </script>

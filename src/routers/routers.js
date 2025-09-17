@@ -4,35 +4,34 @@ import { createRouter, createWebHistory } from 'vue-router'
 import MainLayout from '../layouts/MainLayout.vue'
 
 // Views/Pages  
-import PageOne from '../views/Productos.vue'
-import Productos from '../views/Clientes.vue'
-import PageThree from '../views/Ventas.vue'
+import Productos from '../views/Productos.vue'
+import Clientes from '../views/Clientes.vue'
+import Ventas from '../views/Ventas.vue'
 import ErrorNotFound from '../views/ErrorNotFound.vue'
 
 const routes = [
   {
     path: '/',
     component: MainLayout,
-    meta: { requiresAuth: true },
     children: [
       {
         path: '',        
-        redirect: '/home'
+        redirect: '/productos'
       },
       {
         path: '/productos',
-        name: 'PageOne',
-        component: PageOne
-      },
-      {
-        path: '/clientes',
         name: 'Productos',
         component: Productos
       },
       {
+        path: '/clientes',
+        name: 'Clientes',
+        component: Clientes
+      },
+      {
         path: '/ventas',
-        name: 'PageThree',
-        component: PageThree
+        name: 'Ventas',
+        component: Ventas
       }
     ]
   },
@@ -44,20 +43,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes
-})
-
-// Guard de navegación simplificado
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    const token = localStorage.getItem('pruebas')
-    if (!token) {
-      next(false)
-      return
-    }
-  }
-  next()
 })
 
 export default router

@@ -1,22 +1,10 @@
 <template>
   <div class="q-pa-md">
-    <q-table
-      class="my-sticky-header-table"
-      flat
-      bordered
-      title="Gestión de Clientes"
-      :rows="rowsClientes"
-      :columns="columns"
-      row-key="_id"
-    >
+    <q-table class="my-sticky-header-table" flat bordered title="Gestión de Clientes" :rows="rowsClientes"
+      :columns="columns" row-key="_id">
       <template v-slot:body-cell-telefono="props">
         <q-td :props="props">
-          <q-chip 
-            color="info" 
-            text-color="white"
-            :label="props.row.telefono"
-            icon="phone"
-          />
+          <q-chip color="info" text-color="white" :label="props.row.telefono" icon="phone" />
         </q-td>
       </template>
 
@@ -30,25 +18,9 @@
 
       <template v-slot:body-cell-options="props">
         <q-td :props="props">
-          <q-btn 
-            flat 
-            round 
-            dense 
-            color="primary" 
-            icon="edit"
-            size="sm"
-            @click="editar(props.row)"
-          />
-          
-          <q-btn 
-            flat 
-            round 
-            dense 
-            color="negative" 
-            icon="delete"
-            size="sm"
-            @click="eliminar(props.row._id)"
-          />
+          <q-btn flat round dense color="primary" icon="edit" size="sm" @click="editar(props.row)" />
+
+          <q-btn flat round dense color="negative" icon="delete" size="sm" @click="eliminar(props.row._id)" />
         </q-td>
       </template>
     </q-table>
@@ -122,7 +94,7 @@ const columns = ref([
   { name: "direccion", label: "Dirección", field: "dirección", sortable: true },
   { name: "correo", label: "Correo", field: "correo" },
   { name: "telefono", label: "Teléfono", field: "telefono" },
-  { name: "options", label: "Opciones" },
+  { name: "options", label: "Opciones", align: "center" },
 ]);
 
 function editar(cliente) {
@@ -145,12 +117,12 @@ function cerrarModal() {
 
 async function guardarCliente() {
   console.log('Guardando:', form.value);
-  
+
   try {
     let r = await putData(`clientes/modificar/${clienteEditando.value._id}`, {
       nombre: form.value.nombre,
       documento: form.value.documento,
-      direccion: form.value.dirección,  // Backend espera sin tilde en req.body
+      direccion: form.value.dirección, 
       correo: form.value.correo,
       telefono: Number(form.value.telefono)
     });
@@ -164,7 +136,7 @@ async function guardarCliente() {
 
 async function eliminar(id) {
   console.log('Eliminando:', id);
-  
+
   if (confirm('¿Está seguro de eliminar este cliente?')) {
     try {
       let r = await putData(`clientes/eliminar/${id}`);

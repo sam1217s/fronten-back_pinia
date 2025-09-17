@@ -38,3 +38,14 @@ export async function putData(url, data) {
         throw error;
     }
 }
+
+// DELETE
+export async function deleteData(url) {
+  try {
+    const response = await apiClient.delete(url);
+    return response.data;
+  } catch (error) {
+    console.error('Error en la petición DELETE:', error);
+    throw error;
+  }
+}

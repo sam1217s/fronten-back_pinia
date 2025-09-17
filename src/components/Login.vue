@@ -22,7 +22,7 @@
             outlined
             class="q-mb-md"
           />
-<!-- aca se maneja boton submit con estado de carga -->
+
           <q-btn
             type="submit"
             color="primary"
@@ -32,7 +32,6 @@
             :loading="isLoading"
             :disable="isLoading"
           >
-          <!-- aca se implementa un slot-->
             <template v-slot:loading>
               <q-spinner-oval class="on-left" />
               Iniciando sesión...
@@ -48,6 +47,7 @@
 import { ref } from "vue";
 import { postData } from "../services/apiClient.js";
 import { useNotifications } from "../composables/useNotifications.js";
+import { apiClient } from "../plugins/pluginAxios.js"; // Importar apiClient
 
 const { success, error, warning } = useNotifications();
 
@@ -72,7 +72,13 @@ async function handleLogin() {
     console.log(r);
 
     if (r.token) {
+      // Guardar token en localStorage
       localStorage.setItem("pruebas", JSON.stringify({ token: r.token }));
+      
+      // ACTUALIZAR el header de axios con el nuevo token
+      apiClient.defaults.headers['x-token'] = r.token;
+      console.log('Token actualizado en axios:', r.token.substring(0, 20) + '...');
+      
       success("¡Bienvenido al sistema!", "Login exitoso");
       emit("login-success");
     } else {
@@ -84,7 +90,6 @@ async function handleLogin() {
   } catch (err) {
     console.log("Error:", err);
 
-    // Ahora "error" sigue siendo la función de notificaciones
     if (err.response && err.response.status === 400) {
       error("Credenciales incorrectas", err.response.data.msg);
     } else {
