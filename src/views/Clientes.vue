@@ -122,7 +122,7 @@ async function guardarCliente() {
     let r = await putData(`clientes/modificar/${clienteEditando.value._id}`, {
       nombre: form.value.nombre,
       documento: form.value.documento,
-      direccion: form.value.dirección, 
+      direccion: form.value.dirección,  // Backend espera sin tilde en req.body
       correo: form.value.correo,
       telefono: Number(form.value.telefono)
     });
